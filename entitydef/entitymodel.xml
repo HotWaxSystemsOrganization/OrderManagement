@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://ofbiz.apache.org/dtds/entitymodel.xsd">
+    <!-- ========================================================= -->
+    <!-- ======================== Defaults ======================= -->
+    <!-- ========================================================= -->
+    <title>Entity of OrderManagement Component</title>
+    <description>None</description>
+    <copyright></copyright>
+    <version></version>
+
+
+    <view-entity entity-name="FindOrderView" package-name="org.apache.ofbiz.ordermanagement"
+                 title="Find Order View">
+
+        <member-entity entity-alias="oh" entity-name="OrderHeader"/>
+        <member-entity entity-alias="oi" entity-name="OrderItem"/>
+        <member-entity entity-alias="opp" entity-name="OrderPaymentPreference"/>
+        <member-entity entity-alias="ocm" entity-name="OrderContactMech"/>
+        <member-entity entity-alias="pcmp" entity-name="PartyContactMechPurpose"/>
+        <member-entity entity-alias="cm" entity-name="ContactMech"/>
+        <member-entity entity-alias="pa" entity-name="PostalAddress"/>
+        <member-entity entity-alias="p" entity-name="Party"/>
+        <member-entity entity-alias="pe" entity-name="Person"/>
+        <member-entity entity-alias="pr" entity-name="PartyRole"/>
+
+        <alias name="orderId" field="orderId" entity-alias="oh" />
+        <alias name="firstName" field="firstName" entity-alias="pe"/>
+        <alias name="lastName" field="lastName" entity-alias="pe"/>
+        <alias name="orderItemSeqId" field="orderItemSeqId" entity-alias="oi" field-set="orderItemSeqId"/>
+        <alias name="productId" field="productId" entity-alias="oi"/>
+        <alias name="quantity" field="quantity" entity-alias="oi"/>
+        <alias name="orderDate" field="orderDate" entity-alias="oh"/>
+        <alias name="statusId" field="statusId" entity-alias="oh"/>
+        <alias name="paymentStatusId" field="statusId" entity-alias="opp"/>
+        <alias name="address1" field="address1" entity-alias="pa"/>
+        <alias name="address2" field="address2" entity-alias="pa"/>
+        <alias name="city" field="city" entity-alias="pa"/>
+        <alias name="stateProvinceGeoID" field="stateProvinceGeoID" entity-alias="pa"/>
+        <alias name="countryGeoID" field="countryGeoID" entity-alias="pa"/>
+        <alias name="postalCode" field="postalCode" entity-alias="pa"/>
+        <!-- Key Relationships -->
+        <view-link entity-alias="oh" rel-entity-alias="oi">
+            <key-map field-name="orderId"/>
+        </view-link>
+        <view-link entity-alias="oh" rel-entity-alias="opp">
+            <key-map field-name="orderId"/>
+        </view-link>
+        <view-link entity-alias="oh" rel-entity-alias="ocm">
+            <key-map field-name="orderId"/>
+        </view-link>
+        <view-link entity-alias="ocm" rel-entity-alias="cm">
+            <key-map field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="cm" rel-entity-alias="pa">
+            <key-map field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="cm" rel-entity-alias="pcmp">
+            <key-map field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="pcmp" rel-entity-alias="p">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="p" rel-entity-alias="pe">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="p" rel-entity-alias="pr">
+            <key-map field-name="partyId"/>
+        </view-link>
+
+        <entity-condition>
+            <condition-list>
+                <condition-expr entity-alias="pr" field-name="roleTypeId" value="CUSTOMER"/>
+                <condition-expr entity-alias="ocm" field-name="contactMechPurposeTypeId" ignore-case="true" operator="like" value="SHIPPING_LOCATION"/>
+            </condition-list>
+        </entity-condition>
+
+    </view-entity>
+
+
+
+</entitymodel>
